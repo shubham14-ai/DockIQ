@@ -1,0 +1,22 @@
+# Standalone agent — run this on a host you want DockIQ to monitor.
+#
+# Local test (same host as the control plane): the main compose already offers
+# an `agent` profile — prefer `docker compose --profile agent up -d agent`.
+#
+# Remote host: set CONTROL_PLANE_URL to the control plane's address and set
+# NATS_URL to its advertised NATS address, then `docker compose -f
+# docker-compose.agent.yml up -d`.
+name: dockiq-agent
+
+services:
+  dockiq-agent:
+    build: .
+    restart: unless-stopped
+    environment:
+      CONTROL_PLANE_URL: ${CONTROL_PLANE_URL:-http://localhost:8080}
+      HOST_NAME: ${HOST_NAME:-}
+      # Override the NATS address the control plane advertises, if needed.
+      NATS_URL: ${NATS_URL:-}
+    volumes:
+      # Read-only in Phase 0 (monitoring only). Phase 1 operations need rw.
+      - /var/run/docker.sock:/var/run/docker.sock:ro

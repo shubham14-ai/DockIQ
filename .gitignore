@@ -1,0 +1,18 @@
+# Env
+.env
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+
+# Go
+agent/dockiq-agent
+agent/go.sum
+*.exe
+
+# Data / local
+*.log
+.DS_Store
